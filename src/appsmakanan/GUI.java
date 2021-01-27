@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import javax.swing.table.TableColumn;
 /**
  *
  * @author Calvin Smile
@@ -20,7 +21,7 @@ import javax.swing.JOptionPane;
 private Connection conn = new koneksi().Koneksi();
     private DefaultTableModel tabmode;
     protected void datatable(){
-        Object[] Baris ={"Kode Barang","Nama Barang","Harga Barang"};
+        Object[] Baris ={"Kode","Nama Makanan","Total"};
         tabmode = new DefaultTableModel(null, Baris);
         jTable1.setModel(tabmode);
         String sql= "select * from makanan";
@@ -29,23 +30,21 @@ private Connection conn = new koneksi().Koneksi();
         ResultSet hasil=stat.executeQuery(sql);
         while(hasil.next()){
             String kode=hasil.getString("kode");
-            String nama=hasil.getString("nama");
-            String hrga=hasil.getString("harga");
+            String nama=hasil.getString("jenismakanan");
+            String ttl=hasil.getString("total");
            
-            String[] data={kode,nama,hrga};
+            String[] data={kode,nama,ttl};
             tabmode.addRow(data);
     }
     } catch (Exception e) {
         }
     } 
-   
    public GUI () {
         initComponents();
+        datatable();
     }
-   
      public void refreshform (){
          datatable();
-        txtKode.setText("");
         txtNama.setText("");
         txtHarga.setText("");
         txtKode.setEnabled(false);
@@ -56,14 +55,11 @@ private Connection conn = new koneksi().Koneksi();
         btnBatal.setEnabled(false);
         btnHapus.setEnabled(false);
         btnTambah.setEnabled(true);
-       
     }
-    
     private void clearform(){
-        txtKode.setText("");
         txtNama.setText("");
         txtHarga.setText("");
-        txtKode.setEnabled(true);
+        txtKode.setEnabled(false);
         txtNama.setEnabled(true);
         txtHarga.setEnabled(true);
         btnSimpan.setEnabled(true);
@@ -71,7 +67,6 @@ private Connection conn = new koneksi().Koneksi();
         btnBatal.setEnabled(true);
         btnSimpan.setText("Simpan");
     }
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -117,6 +112,7 @@ private Connection conn = new koneksi().Koneksi();
         });
 
         btnEdit.setText("Edit");
+        btnEdit.setEnabled(false);
         btnEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditActionPerformed(evt);
@@ -124,6 +120,7 @@ private Connection conn = new koneksi().Koneksi();
         });
 
         btnHapus.setText("Hapus");
+        btnHapus.setEnabled(false);
         btnHapus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHapusActionPerformed(evt);
@@ -131,6 +128,7 @@ private Connection conn = new koneksi().Koneksi();
         });
 
         btnBatal.setText("Batal");
+        btnBatal.setEnabled(false);
         btnBatal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBatalActionPerformed(evt);
@@ -139,7 +137,13 @@ private Connection conn = new koneksi().Koneksi();
 
         jLabel3.setText("Harga Satuan");
 
+        txtHarga.setEnabled(false);
+
         jLabel5.setText("Kode");
+
+        txtKode.setEnabled(false);
+
+        txtNama.setEnabled(false);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -152,6 +156,7 @@ private Connection conn = new koneksi().Koneksi();
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable1MouseClicked(evt);
@@ -160,6 +165,7 @@ private Connection conn = new koneksi().Koneksi();
         jScrollPane1.setViewportView(jTable1);
 
         btnSimpan.setText("Simpan");
+        btnSimpan.setEnabled(false);
         btnSimpan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSimpanActionPerformed(evt);
@@ -179,41 +185,40 @@ private Connection conn = new koneksi().Koneksi();
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(194, 194, 194))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(14, 14, 14)
-                                        .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(31, 31, 31))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(txtNama, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
-                                            .addComponent(txtHarga)
-                                            .addComponent(txtKode))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(14, 14, 14)
+                                .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(80, 80, 80)))
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(194, 194, 194))
+                                .addGap(160, 160, 160))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtNama)
+                                    .addComponent(txtHarga)
+                                    .addComponent(txtKode, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 459, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
             .addGroup(layout.createSequentialGroup()
-                .addGap(208, 208, 208)
+                .addGap(257, 257, 257)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -222,7 +227,7 @@ private Connection conn = new koneksi().Koneksi();
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
@@ -235,7 +240,7 @@ private Connection conn = new koneksi().Koneksi();
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
                             .addComponent(txtHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnTambah)
                             .addComponent(btnEdit)
@@ -257,15 +262,48 @@ private Connection conn = new koneksi().Koneksi();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
+        try {
+            String str="SELECT * FROM makanan";
+             PreparedStatement st = conn.prepareStatement(str);
+            String sql = "SELECT * FROM makanan ORDER BY kode DESC";
+            ResultSet rs = st.executeQuery(sql);
+            if (rs.next()) {
+                String kode = rs.getString("kode").substring(2);
+                String AN = "" + (Integer.parseInt(kode)+1);
+                String Nol = "";
+
+                if(AN.length()==1)
+                    {Nol = "000";}
+                else if(AN.length()==2)
+                    {Nol = "00";}
+                else if(AN.length()==3)
+                    {Nol = "0";}
+                else if(AN.length()==4)
+                    {Nol = "";}
+                txtKode.setText("Ps" + Nol + AN);//sesuaikan dengan variable namenya
+            } else {
+                txtKode.setText("Ps0001");//sesuaikan dengan variable namenya
+            }
+            rs.close();
+          
+        } catch (Exception e) {
+            e.printStackTrace();//penanganan masalah
+        }
         clearform();
         btnTambah.setEnabled(false);        // TODO add your handling code here:
     }//GEN-LAST:event_btnTambahActionPerformed
     private void formWindowActivated(java.awt.event.WindowEvent evt) {                                     
         refreshform();
-        datatable();        // TODO add your handling code here:
+        datatable();   
+        // TODO add your handling code here:
     }
+    
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        txtKode.setEnabled(false);
+        txtNama.setEnabled(true);
+        txtHarga.setEnabled(true);
         btnSimpan.setText("Update");
+        btnSimpan.setEnabled(true);
         btnEdit.setEnabled(false);        // TODO add your handling code here:
     }//GEN-LAST:event_btnEditActionPerformed
     private void btnBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalActionPerformed
@@ -274,7 +312,7 @@ private Connection conn = new koneksi().Koneksi();
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         int ok = JOptionPane.showConfirmDialog(null,"hapus","konfirmasi dialog",JOptionPane.YES_NO_OPTION);
             if (ok==0){
-                String sql = "delete from makanan where kode = '"+ txtKode.getText()+"'";
+                String sql = "delete from makanan where kode= '"+ txtKode.getText()+"'";
                 //mengisi nilai sql
                 try{
                     PreparedStatement stat = conn.prepareStatement(sql);
@@ -297,7 +335,7 @@ private Connection conn = new koneksi().Koneksi();
         if (btnSimpan.getText().equals("Simpan")){
                 sql="insert into makanan values(?,?,?)";}
         else {  
-            sql="update makanan SET kode=?,nama=?, harga=? WHERE kode='"+jTable1.getValueAt(jTable1.getSelectedRow(), 0)+"'";
+            sql="update makanan SET kode=?,jenismakanan=?,total=? WHERE kode='"+jTable1.getValueAt(jTable1.getSelectedRow(), 0)+"'";
         }
         try{
         PreparedStatement stat = conn.prepareStatement(sql);
@@ -313,15 +351,12 @@ private Connection conn = new koneksi().Koneksi();
     refreshform();        // TODO add your handling code here:
     }//GEN-LAST:event_btnSimpanActionPerformed
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-       txtKode.setEnabled(true);
-        txtNama.setEnabled(true);
-        txtHarga.setEnabled(true);
-        btnSimpan.setEnabled(true);
+
+        btnSimpan.setEnabled(false);
         btnTambah.setEnabled(false);
         btnBatal.setEnabled(true);
         btnEdit.setEnabled(true);
-        btnHapus.setEnabled(true);
-        
+        btnHapus.setEnabled(true);        
         txtKode.setText(String.valueOf(jTable1.getValueAt(jTable1.getSelectedRow(), 0)));
         txtNama.setText(String.valueOf(jTable1.getValueAt(jTable1.getSelectedRow(), 1))); 
         txtHarga.setText(String.valueOf(jTable1.getValueAt(jTable1.getSelectedRow(), 2))); // TODO add your handling code here:
